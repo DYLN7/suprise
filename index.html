@@ -3,274 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kado Spesial Untukmu</title>
+    <title>A Special Letter</title>
     <style>
-        :root {
-            --pink: #ffafbd;
-            --dark-pink: #ff8c94;
-            --paper: #fff9e6;
-        }
-
         body {
             margin: 0;
             padding: 0;
+            background-color: #fff0f3; /* Pink sangat soft */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(to bottom, #ffafbd, #ffc3a0);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Times New Roman", Times, serif;
             overflow: hidden;
         }
 
-        /* --- Musik Control --- */
-        #musicToggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: none; /* Muncul setelah amplop dibuka */
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            font-size: 20px;
-            border: none;
-        }
+        #youtube-player { position: absolute; top: -500px; }
 
-        /* --- Tampilan 1: Amplop --- */
+        /* --- CONTAINER UTAMA --- */
         .envelope-wrapper {
             position: relative;
+            width: 300px;
+            height: 200px;
             cursor: pointer;
-            transition: transform 0.3s;
-            text-align: center;
         }
 
-        .envelope-wrapper p {
-            color: white;
-            margin-top: 20px;
-            font-weight: bold;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink { 0% {opacity: 0.3;} 50% {opacity: 1;} 100% {opacity: 0.3;} }
-
-        .envelope {
+        /* Bagian Belakang Amplop */
+        .envelope-back {
             position: relative;
-            width: 250px;
-            height: 180px;
-            background: #f08080;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            width: 300px;
+            height: 200px;
+            background-color: #f8bbd0; /* Pink Muda */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .envelope::before {
-            content: "";
+        /* Penutup Atas (Flap) */
+        .flap {
             position: absolute;
             top: 0;
-            z-index: 2;
-            border-top: 100px solid #f08080;
-            border-left: 125px solid transparent;
-            border-right: 125px solid transparent;
+            left: 0;
+            border-top: 110px solid #f48fb1; /* Warna lebih gelap saat tertutup */
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
             transform-origin: top;
-            transition: transform 0.5s 0.3s;
+            transition: transform 0.6s ease;
+            z-index: 4; /* Di depan semua saat tertutup */
         }
 
-        .envelope::after {
-            content: "";
+        /* Kantong Depan Amplop (The Pocket) */
+        .pocket {
             position: absolute;
-            z-index: 1;
-            width: 0;
-            height: 0;
-            border-top: 90px solid transparent;
-            border-right: 125px solid #ffadad;
-            border-bottom: 90px solid #ffadad;
-            border-left: 125px solid #ffadad;
+            bottom: 0;
+            left: 0;
+            border-left: 150px solid #fce4ec; /* Pink sangat muda */
+            border-right: 150px solid #fce4ec;
+            border-bottom: 110px solid #f8bbd0;
+            border-top: 100px solid transparent;
+            z-index: 3; /* Menutupi surat */
         }
 
-        .envelope-wrapper.open .envelope::before {
-            transform: rotateX(180deg);
-            z-index: 0;
-        }
-
-        .heart-icon {
+        /* Kertas Surat (Inside) */
+        .letter-small {
             position: absolute;
-            top: 50%;
+            bottom: 10px;
+            left: 10%;
+            width: 80%;
+            height: 80%;
+            background: white;
+            z-index: 2; /* Di antara kantong dan bagian belakang */
+            transition: transform 0.8s ease;
+            padding: 15px;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .letter-small p {
+            font-size: 10px;
+            color: #888;
+            margin: 0;
+        }
+
+        /* Emoji Hati */
+        .heart {
+            position: absolute;
+            top: 100px;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 3;
-            font-size: 30px;
-            color: #d63031;
-            transition: opacity 0.3s;
+            z-index: 5;
+            font-size: 35px;
+            transition: 0.3s;
         }
 
-        /* --- Tampilan 2: Surat --- */
-        .letter-container {
+        /* --- ANIMASI BUKA --- */
+        .envelope-wrapper.open .flap {
+            transform: rotateX(180deg);
+            z-index: 0; /* Pindah ke belakang setelah buka */
+        }
+
+        .envelope-wrapper.open .letter-small {
+            transform: translateY(-130px); /* Surat meluncur keluar */
+        }
+
+        .envelope-wrapper.open .heart {
+            opacity: 0;
+        }
+
+        /* --- TAMPILAN SURAT FULL (Long Story) --- */
+        .full-letter-overlay {
             display: none;
-            position: absolute;
-            width: 85%;
-            max-width: 400px;
-            background: var(--paper);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            text-align: center;
-            z-index: 10;
-            animation: slideUp 1s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100vh); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .letter-text {
-            color: #444;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        .next-btn {
-            background: var(--dark-pink);
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        /* --- Tampilan 3: Animasi Foto --- */
-        .gallery-container {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .photo-stack {
-            position: relative;
-            width: 260px;
-            height: 330px;
-            margin-bottom: 20px;
-        }
-
-        .photo {
-            position: absolute;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             background: white;
-            padding: 10px 10px 40px 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border: 1px solid #ddd;
-            cursor: pointer;
-            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s;
+            z-index: 100;
+            overflow-y: auto;
+            padding: 50px 25px;
+            box-sizing: border-box;
+            font-style: italic;
+            animation: fadeIn 1.2s forwards;
         }
 
-        .photo img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Variasi rotasi tumpukan */
-        .photo:nth-child(1) { transform: rotate(-3deg); z-index: 7; }
-        .photo:nth-child(2) { transform: rotate(2deg); z-index: 6; }
-        .photo:nth-child(3) { transform: rotate(-5deg); z-index: 5; }
-        .photo:nth-child(4) { transform: rotate(4deg); z-index: 4; }
-        .photo:nth-child(5) { transform: rotate(-2deg); z-index: 3; }
-        .photo:nth-child(6) { transform: rotate(3deg); z-index: 2; }
-        .photo:nth-child(7) { transform: rotate(-4deg); z-index: 1; }
-
-        .photo.swipe {
-            transform: translateX(200%) rotate(45deg) !important;
-            opacity: 0;
-            pointer-events: none;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .gallery-msg { color: white; text-align: center; font-weight: bold; }
+        .content {
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 2;
+            font-size: 1.2em;
+            text-align: justify;
+            color: #333;
+        }
+
+        .content h2 { font-weight: normal; text-align: center; margin-bottom: 50px; }
+
+        .photo-frame {
+            width: 100%;
+            margin: 35px 0;
+            text-align: center;
+        }
+
+        .photo-frame img {
+            max-width: 100%;
+            height: auto;
+            border: 10px solid #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .footer-sig { text-align: center; margin-top: 60px; padding-bottom: 50px; }
+
+        #musicToggle {
+            position: fixed; top: 15px; right: 15px; z-index: 101;
+            background: #f48fb1; color: white; border-radius: 50%;
+            width: 40px; height: 40px; display: none; border: none; cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Musik (Ganti src dengan file lagu kamu) -->
-    <audio id="myAudio" loop>
-        <source src="lagu.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <!-- Tombol Musik (Play/Pause) -->
+    <!-- Musik YouTube -->
+    <div id="youtube-player"></div>
     <button id="musicToggle" onclick="toggleMusic()">🎵</button>
 
-    <!-- STAGE 1: AMPLOP -->
-    <div class="envelope-wrapper" id="envelopeWrapper" onclick="openLetter()">
-        <div class="envelope"></div>
-        <div class="heart-icon">❤️</div>
-        <p>Klik Amplopnya!</p>
+    <!-- AMPLOP -->
+    <div class="envelope-wrapper" id="wrapper" onclick="startOpening()">
+        <div class="flap"></div>
+        <div class="pocket"></div>
+        <div class="letter-small">
+            <p>Untukmu...</p>
+        </div>
+        <div class="envelope-back"></div>
+        <div class="heart">❤️</div>
     </div>
 
-    <!-- STAGE 2: SURAT -->
-    <div class="letter-container" id="letterContainer">
-        <div class="letter-text">
-            <h3>Halo Sayang...</h3>
-            <p>
-                "Selamat hari spesial ya! Aku cuma mau bilang kalau aku beruntung banget punya kamu. Makasih udah selalu ada buat aku."
-            </p>
-            <p>Ada sesuatu lagi buat kamu...</p>
-        </div>
-        <button class="next-btn" onclick="showGallery()">Klik Disini ✨</button>
-    </div>
-
-    <!-- STAGE 3: GALERI FOTO -->
-    <div class="gallery-container" id="galleryContainer">
-        <div class="photo-stack" id="photoStack">
-            <!-- GANTI URL di bawah ini dengan nama file fotomu (contoh: foto1.jpg) -->
-            <div class="photo" onclick="swipePhoto(this)"><img src="foto1" alt="7"></div>
-            <div class="photo" onclick="swipePhoto(this)"><img src="https://via.placeholder.com/300x400?text=Foto+6" alt="6"></div>
-            <div class="photo" onclick="swipePhoto(this)"><img src="https://via.placeholder.com/300x400?text=Foto+5" alt="5"></div>
-            <div class="photo" onclick="swipePhoto(this)"><img src="https://via.placeholder.com/300x400?text=Foto+4" alt="4"></div>
-            <div class="photo" onclick="swipePhoto(this)"><img src="https://via.placeholder.com/300x400?text=Foto+3" alt="3"></div>
-            <div class="photo" onclick="swipePhoto(this)"><img src="https://via.placeholder.com/300x400?text=Foto+2" alt="2"></div>
-            <div class="photo" onclick="swipePhoto(this)"><img src="https://via.placeholder.com/300x400?text=Foto+1" alt="1"></div>
-        </div>
-        <div class="gallery-msg">
-            <p>Klik fotonya satu-satu ya ❤️</p>
-            <button class="next-btn" onclick="location.reload()" style="background: rgba(255,255,255,0.3);">Ulangi dari Awal</button>
-        </div>
-    </div>
-
-    <script>
-        const audio = document.getElementById('myAudio');
-        const musicBtn = document.getElementById('musicToggle');
-
-        function openLetter() {
-            // Putar Musik
-            audio.play().catch(error => console.log("Audio play failed:", error));
-            musicBtn.style.display = 'flex';
-
-            // Animasi Amplop
-            document.getElementById('envelopeWrapper').classList.add('open');
+    <!-- SURAT FULL SCREEN -->
+    <div class="full-letter-overlay" id="overlay">
+        <div class="content">
+            <h2>Jakarta, 2024</h2>
             
+            <p>
+                Bagian ini adalah awal dari ceritamu. Kamu bisa menuliskan bagaimana semuanya bermula. Gunakan Times New Roman Italic untuk memberikan kesan klasik seperti surat cinta sungguhan di dalam film. "I’ve known you for a while, but it feels like I’ve finally found the one."
+            </p>
+
+            <div class="photo-frame">
+                <img src="foto1.jpg" alt="Memory 1">
+            </div>
+
+            <p>
+                Lanjutkan ceritamu di sini. Mungkin menceritakan momen-momen kecil yang paling berkesan. Lagu Skyline ini akan terus mengiringi langkahmu saat membaca setiap kata yang aku tuliskan dengan penuh perasaan ini.
+            </p>
+
+            <div class="photo-frame">
+                <img src="foto2.jpg" alt="Memory 2">
+            </div>
+
+            <p>
+                Cerita ketiga atau bagian klimaks dari suratmu. Tuliskan harapan-harapanmu untuk masa depan kita bersama. "Promise me you’ll stay by my side, through every sunrise and skyline we see."
+            </p>
+
+            <div class="photo-frame">
+                <img src="foto3.jpg" alt="Memory 3">
+            </div>
+
+            <p>
+                Sebagai penutup, ucapkan kata-kata yang paling ingin kamu sampaikan. Terima kasih sudah bersedia membaca surat kecil yang panjang ini sampai selesai.
+            </p>
+
+            <div class="footer-sig">
+                Selamanya milikmu,<br><br>
+                <strong>[Nama Kamu]</strong>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        let player;
+        const videoId = '7-O08e7nE_I'; // Skyline - Official Audio
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0', width: '0', videoId: videoId,
+                playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': videoId }
+            });
+        }
+
+        function startOpening() {
+            // Putar Musik
+            if (player && player.playVideo) player.playVideo();
+            document.getElementById('musicToggle').style.display = 'block';
+
+            // Jalankan Animasi Amplop
+            const wrapper = document.getElementById('wrapper');
+            wrapper.classList.add('open');
+
+            // Munculkan Surat Full Screen setelah surat meluncur naik
             setTimeout(() => {
-                document.getElementById('envelopeWrapper').style.display = 'none';
-                document.getElementById('letterContainer').style.display = 'block';
-            }, 1000);
-        }
-
-        function showGallery() {
-            document.getElementById('letterContainer').style.display = 'none';
-            document.getElementById('galleryContainer').style.display = 'flex';
-        }
-
-        function swipePhoto(element) {
-            element.classList.add('swipe');
-            // Menambah sedikit getaran suara saat swipe (opsional)
+                document.getElementById('overlay').style.display = 'block';
+            }, 1800);
         }
 
         function toggleMusic() {
-            if (audio.paused) {
-                audio.play();
-                musicBtn.innerText = "🎵";
+            const state = player.getPlayerState();
+            if (state === YT.PlayerState.PLAYING) {
+                player.pauseVideo();
+                document.getElementById('musicToggle').innerText = "🔇";
             } else {
-                audio.pause();
-                musicBtn.innerText = "🔇";
+                player.playVideo();
+                document.getElementById('musicToggle').innerText = "🎵";
             }
         }
     </script>
