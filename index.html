@@ -6,18 +6,13 @@
     <title>A Special Letter</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #fff0f3; /* Pink sangat soft */
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 0; padding: 0;
+            background-color: #fff0f3;
+            display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
             font-family: "Times New Roman", Times, serif;
             overflow: hidden;
         }
-
-        #youtube-player { position: absolute; top: -500px; }
 
         /* --- CONTAINER UTAMA --- */
         .envelope-wrapper {
@@ -25,43 +20,38 @@
             width: 300px;
             height: 200px;
             cursor: pointer;
+            z-index: 10;
         }
 
-        /* Bagian Belakang Amplop */
         .envelope-back {
             position: relative;
             width: 300px;
             height: 200px;
-            background-color: #f8bbd0; /* Pink Muda */
+            background-color: #f8bbd0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        /* Penutup Atas (Flap) */
         .flap {
             position: absolute;
-            top: 0;
-            left: 0;
-            border-top: 110px solid #f48fb1; /* Warna lebih gelap saat tertutup */
+            top: 0; left: 0;
+            border-top: 110px solid #f48fb1;
             border-left: 150px solid transparent;
             border-right: 150px solid transparent;
             transform-origin: top;
             transition: transform 0.6s ease;
-            z-index: 4; /* Di depan semua saat tertutup */
+            z-index: 4;
         }
 
-        /* Kantong Depan Amplop (The Pocket) */
         .pocket {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            border-left: 150px solid #fce4ec; /* Pink sangat muda */
+            bottom: 0; left: 0;
+            border-left: 150px solid #fce4ec;
             border-right: 150px solid #fce4ec;
             border-bottom: 110px solid #f8bbd0;
             border-top: 100px solid transparent;
-            z-index: 3; /* Menutupi surat */
+            z-index: 3;
         }
 
-        /* Kertas Surat (Inside) */
         .letter-small {
             position: absolute;
             bottom: 10px;
@@ -69,7 +59,7 @@
             width: 80%;
             height: 80%;
             background: white;
-            z-index: 2; /* Di antara kantong dan bagian belakang */
+            z-index: 2;
             transition: transform 0.8s ease;
             padding: 15px;
             box-sizing: border-box;
@@ -77,13 +67,6 @@
             text-align: center;
         }
 
-        .letter-small p {
-            font-size: 10px;
-            color: #888;
-            margin: 0;
-        }
-
-        /* Emoji Hati */
         .heart {
             position: absolute;
             top: 100px;
@@ -97,25 +80,23 @@
         /* --- ANIMASI BUKA --- */
         .envelope-wrapper.open .flap {
             transform: rotateX(180deg);
-            z-index: 0; /* Pindah ke belakang setelah buka */
+            z-index: 0;
         }
 
         .envelope-wrapper.open .letter-small {
-            transform: translateY(-130px); /* Surat meluncur keluar */
+            transform: translateY(-130px);
         }
 
         .envelope-wrapper.open .heart {
             opacity: 0;
         }
 
-        /* --- TAMPILAN SURAT FULL (Long Story) --- */
+        /* --- TAMPILAN SURAT FULL --- */
         .full-letter-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: white;
             z-index: 100;
             overflow-y: auto;
@@ -165,8 +146,11 @@
 </head>
 <body>
 
-    <!-- Musik YouTube -->
-    <div id="youtube-player"></div>
+    <!-- AUDIO MP3 -->
+    <audio id="myAudio" loop>
+        <source src="lagu.mp3" type="audio/mpeg">
+    </audio>
+
     <button id="musicToggle" onclick="toggleMusic()">🎵</button>
 
     <!-- AMPLOP -->
@@ -174,7 +158,7 @@
         <div class="flap"></div>
         <div class="pocket"></div>
         <div class="letter-small">
-            <p>Untukmu...</p>
+            <p style="font-size: 12px; color: #888;">Untukmu...</p>
         </div>
         <div class="envelope-back"></div>
         <div class="heart">❤️</div>
@@ -186,7 +170,7 @@
             <h2>Jakarta, 2024</h2>
             
             <p>
-                Bagian ini adalah awal dari ceritamu. Kamu bisa menuliskan bagaimana semuanya bermula. Gunakan Times New Roman Italic untuk memberikan kesan klasik seperti surat cinta sungguhan di dalam film. "I’ve known you for a while, but it feels like I’ve finally found the one."
+                Bagian ini adalah awal dari ceritamu. Kamu bisa menuliskan bagaimana semuanya bermula. Gunakan Times New Roman Italic untuk memberikan kesan klasik.
             </p>
 
             <div class="photo-frame">
@@ -194,7 +178,7 @@
             </div>
 
             <p>
-                Lanjutkan ceritamu di sini. Mungkin menceritakan momen-momen kecil yang paling berkesan. Lagu Skyline ini akan terus mengiringi langkahmu saat membaca setiap kata yang aku tuliskan dengan penuh perasaan ini.
+                Lanjutkan ceritamu di sini. Mungkin menceritakan momen-momen kecil yang paling berkesan.
             </p>
 
             <div class="photo-frame">
@@ -202,7 +186,7 @@
             </div>
 
             <p>
-                Cerita ketiga atau bagian klimaks dari suratmu. Tuliskan harapan-harapanmu untuk masa depan kita bersama. "Promise me you’ll stay by my side, through every sunrise and skyline we see."
+                Cerita ketiga atau bagian klimaks dari suratmu. Tuliskan harapan-harapanmu untuk masa depan kita bersama.
             </p>
 
             <div class="photo-frame">
@@ -210,7 +194,7 @@
             </div>
 
             <p>
-                Sebagai penutup, ucapkan kata-kata yang paling ingin kamu sampaikan. Terima kasih sudah bersedia membaca surat kecil yang panjang ini sampai selesai.
+                Sebagai penutup, ucapkan kata-kata yang paling ingin kamu sampaikan. Terima kasih sudah membaca surat ini sampai selesai.
             </p>
 
             <div class="footer-sig">
@@ -220,33 +204,38 @@
         </div>
     </div>
 
- <script>
-    function startOpening() {
-        // Memutar lagu MP3 saat amplop diklik
-        var audio = document.getElementById("myAudio");
-        audio.play();
+    <script>
+        function startOpening() {
+            // 1. Putar Musik
+            var audio = document.getElementById("myAudio");
+            audio.play().catch(function(error) {
+                console.log("Audio play failed: ", error);
+            });
 
-        document.getElementById('musicToggle').style.display = 'block';
-        const wrapper = document.getElementById('wrapper');
-        wrapper.classList.add('open');
+            // 2. Tampilkan tombol kontrol musik
+            document.getElementById('musicToggle').style.display = 'block';
 
-        // Munculkan surat penuh setelah animasi amplop
-        setTimeout(() => {
-            document.getElementById('overlay').style.display = 'block';
-        }, 1800);
-    }
+            // 3. Jalankan Animasi Amplop
+            var wrapper = document.getElementById('wrapper');
+            wrapper.classList.add('open');
 
-    function toggleMusic() {
-        var audio = document.getElementById("myAudio");
-        var btn = document.getElementById('musicToggle');
-        if (audio.paused) {
-            audio.play();
-            btn.innerText = "🎵";
-        } else {
-            audio.pause();
-            btn.innerText = "🔇";
+            // 4. Munculkan Surat Full Screen setelah animasi selesai (1.8 detik)
+            setTimeout(function() {
+                document.getElementById('overlay').style.display = 'block';
+            }, 1800);
         }
-    }
-</script>
+
+        function toggleMusic() {
+            var audio = document.getElementById("myAudio");
+            var btn = document.getElementById('musicToggle');
+            if (audio.paused) {
+                audio.play();
+                btn.innerText = "🎵";
+            } else {
+                audio.pause();
+                btn.innerText = "🔇";
+            }
+        }
+    </script>
 </body>
 </html>
