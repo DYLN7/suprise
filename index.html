@@ -220,43 +220,33 @@
         </div>
     </div>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script>
-        let player;
-        const videoId = '7-O08e7nE_I'; // Skyline - Official Audio
+ <script>
+    function startOpening() {
+        // Memutar lagu MP3 saat amplop diklik
+        var audio = document.getElementById("myAudio");
+        audio.play();
 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-player', {
-                height: '0', width: '0', videoId: videoId,
-                playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': videoId }
-            });
+        document.getElementById('musicToggle').style.display = 'block';
+        const wrapper = document.getElementById('wrapper');
+        wrapper.classList.add('open');
+
+        // Munculkan surat penuh setelah animasi amplop
+        setTimeout(() => {
+            document.getElementById('overlay').style.display = 'block';
+        }, 1800);
+    }
+
+    function toggleMusic() {
+        var audio = document.getElementById("myAudio");
+        var btn = document.getElementById('musicToggle');
+        if (audio.paused) {
+            audio.play();
+            btn.innerText = "🎵";
+        } else {
+            audio.pause();
+            btn.innerText = "🔇";
         }
-
-        function startOpening() {
-            // Putar Musik
-            if (player && player.playVideo) player.playVideo();
-            document.getElementById('musicToggle').style.display = 'block';
-
-            // Jalankan Animasi Amplop
-            const wrapper = document.getElementById('wrapper');
-            wrapper.classList.add('open');
-
-            // Munculkan Surat Full Screen setelah surat meluncur naik
-            setTimeout(() => {
-                document.getElementById('overlay').style.display = 'block';
-            }, 1800);
-        }
-
-        function toggleMusic() {
-            const state = player.getPlayerState();
-            if (state === YT.PlayerState.PLAYING) {
-                player.pauseVideo();
-                document.getElementById('musicToggle').innerText = "🔇";
-            } else {
-                player.playVideo();
-                document.getElementById('musicToggle').innerText = "🎵";
-            }
-        }
-    </script>
+    }
+</script>
 </body>
 </html>
